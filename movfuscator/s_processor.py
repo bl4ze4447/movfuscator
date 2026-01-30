@@ -32,6 +32,10 @@ def convert_instr(instr_line: str):
     if len(instr_list) == 0:
         return ""
     instr = instr_list[0]
+    instr_suffix = instr[len(instr) - 1]
+    if instr_suffix == "l" and instr != "call" and instr != "mul":
+        instr = instr[:len(instr)-1]
+
     args = [convert_arg(x.replace(",", "")) for x in instr_list[1:]]
 
     if ":" in instr:

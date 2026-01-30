@@ -251,7 +251,7 @@ var m8, 0
 
 # External label pointers (printf, scanf)
 
-label printf, 200
+label l_printf, 200
 
 #
 # User defined variables
@@ -453,9 +453,9 @@ create_op m_div, div_grid
 .endm
 
 .macro m_label dispatch_id
-    m_on_f
-    m_eq mdr, md, \dispatch_id
-    m_sf mdr
+    m_eq_f mdr, md, \dispatch_id
+    m_set mdr, $1
+    m_sf_f mdr
 .endm
 
 .macro m_jc cond dispatch_id
@@ -585,13 +585,8 @@ create_conditional_jump m_jle, mc_le
 .endm
 
 .macro m_int c
-    m_set_f mi1, $20
-    m_set mi1, max
-    mov max, %eax
-    mov mbx, %ebx
-    mov mcx, %ecx
-    mov mdx, %edx
-    int $0x80
+    # we assume that the parser correctly parses :)
+    m_end
 .endm
 
 .macro m_loop label
@@ -607,36 +602,36 @@ main:
 
     # MAIN START
 
-        m_movl n, mcx
-    m_movl $10, mbx
+    m_mov n, mcx
+    m_mov $10, mbx
     m_label et_loop
     m_cmp $0, mcx
     m_je et_afisare
-    m_movl mcx, max
-    m_xor_al mdx, mdx
-    m_div_al mbx
-    m_add_al mdx, s
-    m_movl max, mcx
+    m_mov mcx, max
+    m_xor_a mdx, mdx
+    m_div_a mbx
+    m_add_a mdx, s
+    m_mov max, mcx
     m_jmp et_loop
     m_label et_afisare
-    m_pushl s
+    m_push s
     m_push $formatAfSuma
     m_call printf, printf_ra0
-    m_popl mbx
-    m_popl mbx
-    m_pushl stdout
+    m_pop mbx
+    m_pop mbx
+    m_push stdout
     m_call fflush, fflush_ra1
-    m_add_al $1, msp
+    m_add_a $1, msp
     m_label et_exit
-    m_movl $1, max
-    m_xor_al mbx, mbx
+    m_mov $1, max
+    m_xor_a mbx, mbx
     m_int $0x80
     
 
 
     # MAIN END
 
-    m_label printf
+    m_label l_printf
     m_movmbp $-1, max
     m_dbg max
     m_ret

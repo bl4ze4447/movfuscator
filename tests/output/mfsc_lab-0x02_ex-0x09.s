@@ -251,7 +251,7 @@ var m8, 0
 
 # External label pointers (printf, scanf)
 
-label printf, 200
+label l_printf, 200
 
 #
 # User defined variables
@@ -449,9 +449,9 @@ create_op m_div, div_grid
 .endm
 
 .macro m_label dispatch_id
-    m_on_f
-    m_eq mdr, md, \dispatch_id
-    m_sf mdr
+    m_eq_f mdr, md, \dispatch_id
+    m_set mdr, $1
+    m_sf_f mdr
 .endm
 
 .macro m_jc cond dispatch_id
@@ -581,13 +581,8 @@ create_conditional_jump m_jle, mc_le
 .endm
 
 .macro m_int c
-    m_set_f mi1, $20
-    m_set mi1, max
-    mov max, %eax
-    mov mbx, %ebx
-    mov mcx, %ecx
-    mov mdx, %edx
-    int $0x80
+    # we assume that the parser correctly parses :)
+    m_end
 .endm
 
 .macro m_loop label
@@ -603,36 +598,36 @@ main:
 
     # MAIN START
 
-        m_movl $0b11011111111110111111, max, ;, 0b, este, folosit, pentru, baza, 2
-    m_xor_al mbx, mbx
-    m_xor_al mcx, mcx, ;, daca, aplicam, xor, intre, o, valoare, si, ea, insasi, obtinem, 0;, asadar, aceasta, linie, este, echivalenta, cu, mov, $0, mcx
-    m_movl $32, mdx
+    m_mov $0b11011111111110111111, max, ;, 0b, este, folosit, pentru, baza, 2
+    m_xor_a mbx, mbx
+    m_xor_a mcx, mcx, ;, daca, aplicam, xor, intre, o, valoare, si, ea, insasi, obtinem, 0;, asadar, aceasta, linie, este, echivalenta, cu, mov, $0, mcx
+    m_mov $32, mdx
     m_label et_loop
-    m_testl $1, max
+    m_test $1, max
     m_jz et_zero
-    m_incl mcx
-    m_cmpl mbx, mcx
+    m_inc mcx
+    m_cmp mbx, mcx
     m_jle et_next
-    m_movl mcx, mbx
+    m_mov mcx, mbx
     m_label et_next
-    m_shrl $1, max
-    m_decl mdx
+    m_shr $1, max
+    m_dec mdx
     m_jnz et_loop
     m_jmp et_exit
     m_label et_zero
-    m_xor_al mcx, mcx
+    m_xor_a mcx, mcx
     m_jmp et_next
     m_label et_exit
-    m_movl mbx, max
-    m_movl $1, mbx
-    m_movl $1, max
+    m_mov mbx, max
+    m_mov $1, mbx
+    m_mov $1, max
     m_int $0x80
     
 
 
     # MAIN END
 
-    m_label printf
+    m_label l_printf
     m_movmbp $-1, max
     m_dbg max
     m_ret

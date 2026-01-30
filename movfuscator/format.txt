@@ -594,7 +594,7 @@ main:
 
     # MAIN START
 
-    {MAIN}
+{MAIN}
 
     # MAIN END
 

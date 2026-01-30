@@ -251,7 +251,7 @@ var m8, 0
 
 # External label pointers (printf, scanf)
 
-label printf, 200
+label l_printf, 200
 
 #
 # User defined variables
@@ -448,9 +448,9 @@ create_op m_div, div_grid
 .endm
 
 .macro m_label dispatch_id
-    m_on_f
-    m_eq mdr, md, \dispatch_id
-    m_sf mdr
+    m_eq_f mdr, md, \dispatch_id
+    m_set mdr, $1
+    m_sf_f mdr
 .endm
 
 .macro m_jc cond dispatch_id
@@ -580,13 +580,8 @@ create_conditional_jump m_jle, mc_le
 .endm
 
 .macro m_int c
-    m_set_f mi1, $20
-    m_set mi1, max
-    mov max, %eax
-    mov mbx, %ebx
-    mov mcx, %ecx
-    mov mdx, %edx
-    int $0x80
+    # we assume that the parser correctly parses :)
+    m_end
 .endm
 
 .macro m_loop label
@@ -602,7 +597,7 @@ main:
 
     # MAIN START
 
-        m_mov n, mcx
+    m_mov n, mcx
     m_mov $1, max
     m_label et_loop
     m_mul_a mcx
@@ -616,7 +611,7 @@ main:
 
     # MAIN END
 
-    m_label printf
+    m_label l_printf
     m_movmbp $-1, max
     m_dbg max
     m_ret
