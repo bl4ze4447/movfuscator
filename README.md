@@ -24,6 +24,7 @@ How to use:
   KNOWN ISSUES / NOT IMPLEMENTED YET:
 
   - arrays (they are implementable but the deadline was coming closer so we had to cut corners)
+  - all jumps/function calls require a return adress to be inputted manually as a label to come back to (check m_jmp implementation). This is automatically handles by the parser
   - 'lea' as adresses are also virtualized
   - reading from memory using pointer arithmetic (aside from the stack, which was implemented. NOTE: when adressing relative to %ebp (or mbp in this case), use m_movmbp)
   - some instructions weren't movfuscated like: int, jmp (when looping main)
