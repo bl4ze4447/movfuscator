@@ -7,7 +7,7 @@ How to use:
 - drag and drop your file
 - pray the returned file works !!!
 
-- IMPLEMENTATION AND VERY IMPORTANT THINGS TO CONSIDER -
+* IMPLEMENTATION AND VERY IMPORTANT THINGS TO CONSIDER *
 
   This implementation of the movfuscator tries to use a different approach when compared to the one we had to use as inspiration. We used the part where he made macros and took it to another level.
   This movfuscator heavily relies on the idea that the may be a bijection between any two instructions, one is the classic and one is the movfuscated. In other words, we believe that any basic instruction can be rewritten using only movs. This, of course, comes with its hurdles and limitations.
